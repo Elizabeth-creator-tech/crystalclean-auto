@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Archived Jobs - CrystalClean Auto{% endblock %}
+
+{% block content %}
+<div class="dashboard-header" style="margin-bottom: 32px;">
+    <div>
+        <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);">Archived Jobs</h1>
+        <p style="color: var(--text-light); margin-top: 8px;">View and manage historical job records</p>
+    </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<!-- Search and Filter -->
+<div class="card">
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('view_archived_jobs') }}" class="flex gap-2" style="align-items: flex-end;">
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <label for="search" class="form-label">Search</label>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Search by plate, customer name or phone..." value="{{ search }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{{ url_for('view_archived_jobs') }}" class="btn btn-secondary">Clear</a>
+        </form>
+    </div>
+</div>
+
+<!-- Archived Jobs Table -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Archived Records ({{ archived_jobs.total }} total)</h2>
+    </div>
+    <div class="card-body">
+        {% if archived_jobs.items %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Plate Number</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Service</th>
+                        <th>Price</th>
+                        <th>Staff</th>
+                        <th>Duration</th>
+                        <th>Completed</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in archived_jobs.items %}
+                    <tr>
+                        <td><strong>{{ job.plate_number }}</strong></td>
+                        <td>{{ job.customer_name }}</td>
+                        <td>{{ job.customer_phone }}</td>
+                        <td>{{ job.service_name }}</td>
+                        <td>KSh {{ '{:,.0f}'.format(job.service_price) }}</td>
+                        <td>{{ job.staff_name or 'N/A' }}</td>
+                        <td>{{ job.duration_minutes or 'N/A' }} mins</td>
+                        <td>{{ job.time_out.strftime('%Y-%m-%d %H:%M') if job.time_out else 'N/A' }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_archived_job', archive_id=job.id) }}" style="display: inline;" onsubmit="return confirm('Permanently delete this archived job?')">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if archived_jobs.pages > 1 %}
+        <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 24px;">
+            {% if archived_jobs.has_prev %}
+                <a href="{{ url_for('view_archived_jobs', page=archived_jobs.prev_num, search=search) }}" class="btn btn-sm btn-secondary">← Previous</a>
+            {% endif %}
+            
+            <span style="color: var(--text-light);">Page {{ archived_jobs.page }} of {{ archived_jobs.pages }}</span>
+            
+            {% if archived_jobs.has_next %}
+                <a href="{{ url_for('view_archived_jobs', page=archived_jobs.next_num, search=search) }}" class="btn btn-sm btn-secondary">Next </a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon"></div>
+            <h3 class="empty-state-title">No Archived Jobs</h3>
+            <p class="empty-state-text">
+                {% if search %}
+                    No results found for "{{ search }}"
+                {% else %}
+                    Completed jobs will be archived here after 24 hours
+                {% endif %}
+            </p>
+            {% if search %}
+                <a href="{{ url_for('view_archived_jobs') }}" class="btn btn-primary">Clear Search</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

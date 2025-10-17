@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Server Error - CrystalClean Auto{% endblock %}
+{% block content %}
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; padding: 40px 20px;">
+    <div style="font-size: 120px; font-weight: 800; color: var(--danger-color); line-height: 1; margin-bottom: 20px;">
+        500
+    </div>
+    
+    <h1 style="font-size: 36px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px;">
+        Internal Server Error
+    </h1>
+    
+    <p style="font-size: 18px; color: var(--text-light); margin-bottom: 32px; max-width: 500px;">
+        Oops! Something went wrong on our end. We're working to fix the issue. Please try again later.
+    </p>
+    
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+        {% if current_user.is_authenticated %}
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary btn-lg">
+                    Go to Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('staff_dashboard') }}" class="btn btn-primary btn-lg">
+                    Go to Dashboard
+                </a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                Go to Login
+            </a>
+        {% endif %}
+        <button onclick="location.reload()" class="btn btn-secondary btn-lg">
+            Reload Page
+        </button>
+    </div>
+    
+    <div style="margin-top: 60px; opacity: 0.3;">
+        <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" stroke="currentColor" stroke-width="8"/>
+            <path d="M70 85 L70 115 M130 85 L130 115" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+            <path d="M60 140 Q100 160 140 140" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M40 40 L160 160 M160 40 L40 160" stroke="var(--danger-color)" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+    </div>
+</div>
+{% endblock %}

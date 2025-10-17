@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - CrystalClean Auto{% endblock %}
+
+{% block content %}
+<div class="dashboard-header" style="margin-bottom: 32px;">
+    <div>
+        <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);">Manage Users</h1>
+        <p style="color: var(--text-light); margin-top: 8px;">Add, edit, or remove staff members</p>
+    </div>
+    <button class="btn btn-primary" onclick="openAddUserModal()">
+        <span style="font-size: 18px; margin-right: 8px;">+</span> Add User
+    </button>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if users %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td><strong>{{ user.username }}</strong></td>
+                        <td>{{ user.full_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="badge {% if user.role == 'admin' %}badge-ready{% else %}badge-washing{% endif %}">
+                                {{ user.role.upper() }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge {% if user.is_active %}badge-ready{% else %}badge-cancelled{% endif %}">
+                                {% if user.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-secondary" onclick="openEditUserModal({{ user.id }}, '{{ user.username }}', '{{ user.full_name }}', '{{ user.email }}', '{{ user.role }}', {{ user.is_active|lower }})">
+                                    Edit
+                                </button>
+                                {% if user.id != current_user.id %}
+                                <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">👥</div>
+            <h3 class="empty-state-title">No Users Yet</h3>
+            <p class="empty-state-text">Add your first staff member to get started</p>
+            <button class="btn btn-primary" onclick="openAddUserModal()">Add First User</button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal-overlay" id="addUserModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Add New User</h2>
+            <button class="modal-close" onclick="closeAddUserModal()">&times;</button>
+        </div>
+        <form method="POST" action="{{ url_for('add_user') }}">
+            {{ add_form.hidden_tag() }}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username *</label>
+                    {{ add_form.username(class="form-control", placeholder="johndoe") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="full_name" class="form-label">Full Name *</label>
+                    {{ add_form.full_name(class="form-control", placeholder="John Doe") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email *</label>
+                    {{ add_form.email(class="form-control", placeholder="john@example.com") }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password *</label>
+                        {{ add_form.password(class="form-control", placeholder="••••••••") }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role" class="form-label">Role *</label>
+                        {{ add_form.role(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        {{ add_form.is_active() }}
+                        <span style="font-weight: 500;">Active</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal-overlay" id="editUserModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Edit User</h2>
+            <button class="modal-close" onclick="closeEditUserModal()">&times;</button>
+        </div>
+        <form method="POST" id="editUserForm">
+            {{ edit_form.hidden_tag() }}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit_username" class="form-label">Username *</label>
+                    {{ edit_form.username(class="form-control", id="edit_username") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="edit_full_name" class="form-label">Full Name *</label>
+                    {{ edit_form.full_name(class="form-control", id="edit_full_name") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="edit_email" class="form-label">Email *</label>
+                    {{ edit_form.email(class="form-control", id="edit_email") }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit_password" class="form-label">Password (leave blank to keep current)</label>
+                        {{ edit_form.password(class="form-control", id="edit_password", placeholder="••••••••") }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_role" class="form-label">Role *</label>
+                        {{ edit_form.role(class="form-control", id="edit_role") }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        {{ edit_form.is_active(id="edit_is_active") }}
+                        <span style="font-weight: 500;">Active</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditUserModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openAddUserModal() {
+    document.getElementById('addUserModal').classList.add('active');
+}
+
+function closeAddUserModal() {
+    document.getElementById('addUserModal').classList.remove('active');
+}
+
+function openEditUserModal(id, username, fullName, email, role, isActive) {
+    document.getElementById('edit_username').value = username;
+    document.getElementById('edit_full_name').value = fullName;
+    document.getElementById('edit_email').value = email;
+    document.getElementById('edit_role').value = role;
+    document.getElementById('edit_is_active').checked = isActive;
+    document.getElementById('editUserForm').action = `/users/edit/${id}`;
+    document.getElementById('editUserModal').classList.add('active');
+}
+
+function closeEditUserModal() {
+    document.getElementById('editUserModal').classList.remove('active');
+}
+
+// Close modal when clicking outside
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
+    });
+});
+</script>
+{% endblock %}

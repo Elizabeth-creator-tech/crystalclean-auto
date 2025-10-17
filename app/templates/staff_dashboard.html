@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Dashboard - CrystalClean Auto{% endblock %}
+
+{% block content %}
+<div class="dashboard-header" style="margin-bottom: 32px;">
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);">My Tasks</h1>
+    <p style="color: var(--text-light); margin-top: 8px;">Welcome back, {{ current_user.username }}!</p>
+</div>
+
+<!-- Statistics Cards -->
+<div class="stats-grid">
+    <div class="stat-card stat-warning">
+        <div class="stat-label">Assigned to Me</div>
+        <div class="stat-value">{{ stats.assigned }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">In Progress</div>
+        <div class="stat-value">{{ stats.in_progress }}</div>
+    </div>
+    <div class="stat-card stat-success">
+        <div class="stat-label">Completed Today</div>
+        <div class="stat-value">{{ stats.completed_today }}</div>
+    </div>
+</div>
+
+<!-- Assigned Jobs -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">My Assigned Jobs</h2>
+    </div>
+    <div class="card-body">
+        {% if assigned_cars %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Plate Number</th>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Service</th>
+                        <th>Current Status</th>
+                        <th>Time In</th>
+                        <th>Update Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for car in assigned_cars %}
+                    <tr>
+                        <td><strong>{{ car.plate_number }}</strong></td>
+                        <td>{{ car.customer_name }}</td>
+                        <td>{{ car.customer_phone }}</td>
+                        <td>{{ car.service.name }}</td>
+                        <td>
+                            <span class="badge badge-{{ car.status.lower().replace(' ', '-') }}">
+                                {{ car.status }}
+                            </span>
+                        </td>
+                        <td>{{ car.time_in_display.strftime('%I:%M %p') if car.time_in_display else 'N/A' }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('update_status', car_id=car.id) }}" style="display: flex; gap: 8px; align-items: center;">
+                                <select name="status" class="form-control" style="width: auto; min-width: 150px;" required>
+                                    <option value="" disabled selected>Update status...</option>
+                                    <option value="Waiting" {% if car.status == 'Waiting' %}disabled{% endif %}>Waiting</option>
+                                    <option value="Washing" {% if car.status == 'Washing' %}disabled{% endif %}>Washing</option>
+                                    <option value="Detailing" {% if car.status == 'Detailing' %}disabled{% endif %}>Detailing</option>
+                                    <option value="Ready for Pickup" {% if car.status == 'Ready for Pickup' %}disabled{% endif %}>Ready for Pickup</option>
+                                    <option value="Completed" {% if car.status == 'Completed' %}disabled{% endif %}>Completed</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon"></div>
+            <h3 class="empty-state-title">No Jobs Assigned</h3>
+            <p class="empty-state-text">You don't have any jobs assigned to you at the moment</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Completed Jobs Today -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Completed Today</h2>
+    </div>
+    <div class="card-body">
+        {% if completed_cars %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Plate Number</th>
+                        <th>Customer Name</th>
+                        <th>Service</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for car in completed_cars %}
+                    <tr>
+                        <td><strong>{{ car.plate_number }}</strong></td>
+                        <td>{{ car.customer_name }}</td>
+                        <td>{{ car.service.name }}</td>
+                        <td>{{ car.time_in_display.strftime('%I:%M %p') if car.time_in_display else 'N/A' }}</td>
+                        <td>{{ car.time_out_display.strftime('%I:%M %p') if car.time_out_display else '-' }}</td>
+                        <td>
+                            {% if car.time_out and car.time_in %}
+                                {{ ((car.time_out - car.time_in).seconds // 60) }} mins
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon"></div>
+            <h3 class="empty-state-title">No Completed Jobs Yet</h3>
+            <p class="empty-state-text">Jobs you complete today will appear here</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

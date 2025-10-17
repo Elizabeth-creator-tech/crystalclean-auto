@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Job - CrystalClean Auto{% endblock %}
+
+{% block content %}
+<div class="dashboard-header" style="margin-bottom: 32px;">
+    <div>
+        <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);">Edit Job</h1>
+        <p style="color: var(--text-light); margin-top: 8px;">Update job details for {{ car.plate_number }}</p>
+    </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+        ← Back to Dashboard
+    </a>
+</div>
+
+<div class="card" style="max-width: 800px;">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('edit_car', car_id=car.id) }}">
+            {{ form.hidden_tag() }}
+
+            <!-- Customer Information Section -->
+            <h3 style="margin-bottom: 20px; color: var(--text-dark); font-size: 18px; font-weight: 700;">Customer Information</h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="customer_name" class="form-label">Customer Name *</label>
+                    {{ form.customer_name(class="form-control") }}
+                    {% if form.customer_name.errors %}
+                        {% for error in form.customer_name.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_phone" class="form-label">Phone Number *</label>
+                    {{ form.customer_phone(class="form-control") }}
+                    {% if form.customer_phone.errors %}
+                        {% for error in form.customer_phone.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="customer_email" class="form-label">Email (Optional)</label>
+                {{ form.customer_email(class="form-control") }}
+                {% if form.customer_email.errors %}
+                    {% for error in form.customer_email.errors %}
+                        <div class="form-error">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Vehicle Information Section -->
+            <h3 style="margin: 32px 0 20px; color: var(--text-dark); font-size: 18px; font-weight: 700;">Vehicle Information</h3>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="plate_number" class="form-label">Plate Number *</label>
+                    {{ form.plate_number(class="form-control", style="text-transform: uppercase;") }}
+                    {% if form.plate_number.errors %}
+                        {% for error in form.plate_number.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="car_model" class="form-label">Car Model</label>
+                    {{ form.car_model(class="form-control") }}
+                    {% if form.car_model.errors %}
+                        {% for error in form.car_model.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Service Information Section -->
+            <h3 style="margin: 32px 0 20px; color: var(--text-dark); font-size: 18px; font-weight: 700;">Service Information</h3>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="service_id" class="form-label">Service Type *</label>
+                    {{ form.service_id(class="form-control") }}
+                    {% if form.service_id.errors %}
+                        {% for error in form.service_id.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="assigned_user_id" class="form-label">Assign to Staff *</label>
+                    {{ form.assigned_user_id(class="form-control") }}
+                    {% if form.assigned_user_id.errors %}
+                        {% for error in form.assigned_user_id.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="status" class="form-label">Job Status *</label>
+                {{ form.status(class="form-control") }}
+                {% if form.status.errors %}
+                    {% for error in form.status.errors %}
+                        <div class="form-error">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="notes" class="form-label">Additional Notes</label>
+                {{ form.notes(class="form-control") }}
+                {% if form.notes.errors %}
+                    {% for error in form.notes.errors %}
+                        <div class="form-error">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Time Information -->
+            <div class="card" style="background: #f8f9fa; padding: 16px; margin-top: 24px; border-radius: 8px;">
+                <h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 600; color: var(--text-dark);">Time Information</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
+                    <div>
+                        <strong>Time In:</strong> {{ car.time_in_display.strftime('%I:%M %p, %b %d') if car.time_in_display else 'N/A' }}
+                    </div>
+                    <div>
+                        <strong>Time Out:</strong> {{ car.time_out_display.strftime('%I:%M %p, %b %d') if car.time_out_display else 'Not completed yet' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="flex gap-2" style="margin-top: 32px;">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Save Changes
+                </button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary btn-lg">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

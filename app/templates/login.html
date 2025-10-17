@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CrystalClean Auto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <!--<img src="{{ url_for('static', filename='images/crystal-clean.png') }}" alt="CrystalClean Logo" class="login-logo">-->
+                <h1 class="login-title">CrystalClean Auto</h1>
+                <p class="login-subtitle">Smart Workflow Tracking System</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}" style="margin-bottom: 20px;">
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    {{ form.username(class="form-control", placeholder="Enter your username", autocomplete="username") }}
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    {{ form.password(class="form-control", placeholder="Enter your password", autocomplete="current-password") }}
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <div class="form-error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="flex" style="align-items: center; gap: 8px;">
+                        {{ form.remember_me() }}
+                        <span style="font-weight: 500; font-size: 14px;">Remember Me</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

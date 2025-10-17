@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Full Analytics - CrystalClean Auto{% endblock %}
+
+{% block content %}
+<div class="dashboard-header" style="margin-bottom: 32px;">
+    <div>
+        <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);">📊 Full Business Analytics</h1>
+        <p style="color: var(--text-light); margin-top: 8px;">Historical data and insights from archived jobs</p>
+    </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<!-- Overall Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Archived Jobs</div>
+        <div class="stat-value">{{ total_archived }}</div>
+    </div>
+    <div class="stat-card stat-success">
+        <div class="stat-label">Total Revenue (All Time)</div>
+        <div class="stat-value">KSh {{ '{:,.0f}'.format(total_revenue) }}</div>
+    </div>
+</div>
+
+<!-- Popular Services -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Most Popular Services (All Time)</h2>
+    </div>
+    <div class="card-body">
+        {% if popular_services %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Times Booked</th>
+                        <th>Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in popular_services %}
+                    <tr>
+                        <td><strong>{{ service[0] }}</strong></td>
+                        <td>{{ service[1] }}</td>
+                        <td>KSh {{ '{:,.0f}'.format(service[2]) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🧼</div>
+            <h3 class="empty-state-title">No Data Yet</h3>
+            <p class="empty-state-text">Service data will appear here once jobs are archived</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Top Customers -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Top Customers (Most Visits)</h2>
+    </div>
+    <div class="card-body">
+        {% if top_customers %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Total Visits</th>
+                        <th>Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in top_customers %}
+                    <tr>
+                        <td><strong>{{ customer[0] }}</strong></td>
+                        <td>{{ customer[1] }}</td>
+                        <td>{{ customer[2] }} visits</td>
+                        <td>KSh {{ '{:,.0f}'.format(customer[3]) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon"></div>
+            <h3 class="empty-state-title">No Customer Data</h3>
+            <p class="empty-state-text">Customer statistics will appear here</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Staff Performance -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Staff Performance - All Time</h2>
+    </div>
+    <div class="card-body">
+        {% if staff_stats %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Staff Member</th>
+                        <th>Jobs Completed</th>
+                        <th>Avg Duration (mins)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for staff in staff_stats %}
+                    <tr>
+                        <td><strong>{{ staff[0] }}</strong></td>
+                        <td>{{ staff[1] }}</td>
+                        <td>{{ '{:.0f}'.format(staff[2]) if staff[2] else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon"></div>
+            <h3 class="empty-state-title">No Staff Data</h3>
+            <p class="empty-state-text">Staff performance will appear here</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Service Duration Analysis -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Average Service Duration</h2>
+    </div>
+    <div class="card-body">
+        {% if service_durations %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Average Duration</th>
+                        <th>Fastest</th>
+                        <th>Slowest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in service_durations %}
+                    <tr>
+                        <td><strong>{{ service[0] }}</strong></td>
+                        <td>{{ '{:.0f}'.format(service[1]) }} mins</td>
+                        <td>{{ '{:.0f}'.format(service[2]) }} mins</td>
+                        <td>{{ '{:.0f}'.format(service[3]) }} mins</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon"></div>
+            <h3 class="empty-state-title">No Duration Data</h3>
+            <p class="empty-state-text">Service duration analysis will appear here</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Danger Zone -->
+<div class="card" style="border: 2px solid var(--danger-color);">
+    <div class="card-header" style="background-color: #fee2e2;">
+        <h2 class="card-title" style="color: var(--danger-color);">Danger Zone</h2>
+    </div>
+    <div class="card-body">
+        <p style="margin-bottom: 16px;">Permanently delete all archived data. This action cannot be undone!</p>
+        <form method="POST" action="{{ url_for('clear_all_archives') }}" onsubmit="return confirm('WARNING: This will permanently delete ALL archived jobs! This cannot be undone. Are you absolutely sure?')">
+            <button type="submit" class="btn btn-danger">
+                Delete All Archived Data
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
