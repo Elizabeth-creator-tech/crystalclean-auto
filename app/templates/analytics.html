@@ -5,7 +5,7 @@
 {% block content %}
 <div class="dashboard-header" style="margin-bottom: 32px;">
     <div>
-        <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);">📊 Full Business Analytics</h1>
+        <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);"> Full Business Analytics</h1>
         <p style="color: var(--text-light); margin-top: 8px;">Historical data and insights from archived jobs</p>
     </div>
     <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
@@ -52,7 +52,7 @@
         </div>
         {% else %}
         <div class="empty-state">
-            <div class="empty-state-icon">🧼</div>
+            <div class="empty-state-icon"></div>
             <h3 class="empty-state-title">No Data Yet</h3>
             <p class="empty-state-text">Service data will appear here once jobs are archived</p>
         </div>
