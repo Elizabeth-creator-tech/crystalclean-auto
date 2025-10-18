@@ -63,7 +63,7 @@
         </div>
         {% else %}
         <div class="empty-state">
-            <div class="empty-state-icon">👥</div>
+            <div class="empty-state-icon"></div>
             <h3 class="empty-state-title">No Users Yet</h3>
             <p class="empty-state-text">Add your first staff member to get started</p>
             <button class="btn btn-primary" onclick="openAddUserModal()">Add First User</button>
@@ -89,18 +89,18 @@
 
                 <div class="form-group">
                     <label for="full_name" class="form-label">Full Name *</label>
-                    {{ add_form.full_name(class="form-control", placeholder="John Doe") }}
+                    {{ add_form.full_name(class="form-control", placeholder="Lucky John") }}
                 </div>
 
                 <div class="form-group">
                     <label for="email" class="form-label">Email *</label>
-                    {{ add_form.email(class="form-control", placeholder="john@example.com") }}
+                    {{ add_form.email(class="form-control", placeholder="lucky@example.com") }}
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="password" class="form-label">Password *</label>
-                        {{ add_form.password(class="form-control", placeholder="••••••••") }}
+                        {{ add_form.password(class="form-control", placeholder="********") }}
                     </div>
 
                     <div class="form-group">
@@ -152,7 +152,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="edit_password" class="form-label">Password (leave blank to keep current)</label>
-                        {{ edit_form.password(class="form-control", id="edit_password", placeholder="••••••••") }}
+                        {{ edit_form.password(class="form-control", id="edit_password", placeholder="********") }}
                     </div>
 
                     <div class="form-group">

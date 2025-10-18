@@ -76,9 +76,9 @@ def auto_archive_old_jobs():
     
     return archived_count
 
-# ============================================
+
 # AUTHENTICATION ROUTES
-# ============================================
+
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -120,9 +120,9 @@ def logout():
     return redirect(url_for('login'))
 
 
-# ============================================
+
 # ADMIN DASHBOARD
-# ============================================
+
 
 @app.route('/admin/dashboard')
 @login_required
@@ -191,9 +191,9 @@ def admin_dashboard():
     return render_template('admin_dashboard.html', stats=stats, cars=active_cars)
 
 
-# ============================================
+
 # DATA MANAGEMENT ROUTES
-# ============================================
+
 
 @app.route('/admin/archive-now', methods=['POST']) #when data sends post request here, the archive_now() is called 
 @login_required #ensures that only logged-in users can access this route
@@ -372,9 +372,9 @@ def clear_all_archives():
     return redirect(url_for('analytics'))
 
 
-# ============================================
+
 # STAFF DASHBOARD
-# ============================================
+
 
 @app.route('/staff/dashboard')
 @login_required
@@ -415,9 +415,9 @@ def staff_dashboard():
                          completed_cars=completed_cars)
 
 
-# ============================================
+
 # CAR/JOB MANAGEMENT
-# ============================================
+
 
 @app.route('/cars/add', methods=['GET', 'POST'])
 @login_required
@@ -543,9 +543,9 @@ def update_status(car_id):
     return redirect(url_for('staff_dashboard'))
 
 
-# ============================================
+
 # SERVICE MANAGEMENT
-# ============================================
+
 
 @app.route('/services')
 @login_required
@@ -622,9 +622,9 @@ def delete_service(service_id):
     return redirect(url_for('manage_services'))
 
 
-# ============================================
+
 # USER MANAGEMENT
-# ============================================
+
 
 @app.route('/users')
 @login_required
@@ -708,9 +708,9 @@ def delete_user(user_id):
     return redirect(url_for('manage_users'))
 
 
-# ============================================
+
 # REPORTS
-# ============================================
+
 
 @app.route('/reports')
 @login_required
@@ -765,9 +765,9 @@ def reports():
                          popular_services=popular_services)
 
 
-# ============================================
+
 # ERROR HANDLERS
-# ============================================
+
 
 @app.errorhandler(404)
 def not_found_error(error):
