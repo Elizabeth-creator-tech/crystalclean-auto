@@ -5,55 +5,55 @@ Backend Files to Paste
  1. Core Backend Files
 Paste these into your project:
 
-- `app/models.py` ← From artifact "models.py - Database Models"
-- `app/__init__.py` ← From artifact "__init__.py - Flask App Initialization"
-- `app/forms.py` ← From artifact "forms.py - Flask-WTF Forms"
-- `app/routes.py` ← From artifact "routes.py - COMPLETE (Merge Part 1 & 2)"
-- `app/utils.py` ← From artifact "utils.py - Helper Functions"
-- `app/database/seed_data.py` ← From artifact "seed_data.py - Initial Database Seeding"
-- `config.py` (root) ← From artifact "config.py - Configuration Settings"
-- `run.py` (root) ← From artifact "run.py - Application Entry Point"
-- `app/templates/reports.html` ← From artifact "reports.html - Reports Page"
+- app/models.py -- From artifact "models.py - Database Models"
+- app/__init__.py -- From artifact "__init__.py - Flask App Initialization"
+- app/forms.py -- From artifact "forms.py - Flask-WTF Forms"
+- app/routes.py -- From artifact "routes.py - COMPLETE (Merge Part 1 & 2)"
+- app/utils.py -- From artifact "utils.py - Helper Functions"
+- app/database/seed_data.py -- From artifact "seed_data.py - Initial Database Seeding"
+- config.py (root) -- From artifact "config.py - Configuration Settings"
+- run.py (root) -- From artifact "run.py - Application Entry Point"
+- app/templates/reports.html -- From artifact "reports.html - Reports Page"
 
 
 
  Installation Steps
 
  Step 1: Create Virtual Environment
-```bash
+bash
 cd crystalclean
 python -m venv venv
-```
+
 
  Step 2: Activate Virtual Environment
 Windows:
-```bash
+bash
 venv\Scripts\activate
-```
+
 
 Mac/Linux:
-```bash
+bash
 source venv/bin/activate
-```
+
 
  Step 3: Install Dependencies
-```bash
+bash
 pip install -r requirements.txt
-```
+
 
  Step 4: Add Logo Images (Optional)
 Place your logo files in:
-- `app/static/images/logo.png`
-- `app/static/images/crystal-clean.png`
+- app/static/images/logo.png
+- app/static/images/crystal-clean.png
 
 
 
  ▶️ Running the Application
 
  Start the Server
-```bash
+bash
 python run.py
-```
+
 
 The application will start at: http://localhost:5000
 
@@ -62,12 +62,12 @@ The application will start at: http://localhost:5000
  Default Login Credentials
 
  Admin Account:
-- Username: `admin`
-- Password: `admin123`
+- Username: admin
+- Password: admin123
 
  Staff Accounts:
-- Username: `john` | Password: `staff123`
-- Username: `mary` | Password: `staff123`
+- Username: john | Password: staff123
+- Username: mary | Password: staff123
 
 
 
@@ -99,7 +99,7 @@ The application will start at: http://localhost:5000
 
 Project Structure
 
-```
+
 crystalclean/
 ├── app/
 │   ├── __init__.py           # App initialization
@@ -121,7 +121,7 @@ crystalclean/
 ├── config.py                 # Configuration
 ├── run.py                    # Entry point
 └── requirements.txt          # Dependencies
-```
+
 
 
 
@@ -129,23 +129,23 @@ Troubleshooting
 
  Issue: "Module not found" error
 Solution:
-```bash
+bash
 pip install -r requirements.txt
-```
+
 
  Issue: "No such table" error
-Solution: Delete `app.db` and restart the server. The database will be recreated with seed data.
-```bash
+Solution: Delete app.db and restart the server. The database will be recreated with seed data.
+bash
 del app.db   Windows
 rm app.db    Mac/Linux
 python run.py
-```
+
 
  Issue: Port 5000 already in use
-Solution: Change port in `run.py`:
-```python
+Solution: Change port in run.py:
+python
 app.run(debug=True, host='0.0.0.0', port=5001)   Change to 5001
-```
+
 
 
 Features Implemented
