@@ -703,18 +703,9 @@ def delete_user(user_id):
         return redirect(url_for('manage_users'))
     
     username = user.username
-    try:
-        # Delete associated notifications first
-        Notification.query.filter_by(user_id=user.id).delete()
-        
-        # Then delete the user
-        db.session.delete(user)
-        db.session.commit()
-        flash(f'User "{username}" deleted successfully!', 'success')
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Error deleting user: {str(e)}', 'error')
-    
+    db.session.delete(user)
+    db.session.commit()
+    flash(f'User "{username}" deleted successfully!', 'success')
     return redirect(url_for('manage_users'))
 
 
