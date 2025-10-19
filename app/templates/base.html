@@ -23,7 +23,7 @@
 
     <!-- Navigation -->
     {% if current_user.is_authenticated %}
-<!-- Replace your navbar section in base.html with this -->
+
 <nav class="navbar">
     <div class="nav-container">
         <!--!<div class="nav-brand">
@@ -42,14 +42,15 @@
         <ul class="nav-menu">
             {% if current_user.is_authenticated %}
                 {% if current_user.role == 'admin' %}
-                    <li><a href="{{ url_for('admin_dashboard') }}" class="nav-link">Dashboard</a></li>
+                    <li><a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">Dashboard</a></li>
+                    
                     <li><a href="{{ url_for('add_car') }}" class="nav-link">Add Job</a></li>
                     <li><a href="{{ url_for('manage_services') }}" class="nav-link">Services</a></li>
                     <li><a href="{{ url_for('manage_users') }}" class="nav-link">Users</a></li>
                     <li><a href="{{ url_for('reports') }}" class="nav-link">Reports</a></li>
                     <li><a href="{{ url_for('analytics') }}" class="nav-link">Analytics</a></li>
                 {% else %}
-                    <li><a href="{{ url_for('staff_dashboard') }}" class="nav-link">My Tasks</a></li>
+                    <li><a href="{{ url_for('staff_dashboard') }}" class="nav-link">View Jobs</a></li>
                 {% endif %}
                 
                 <div class="nav-user">

@@ -698,7 +698,8 @@ def delete_user(user_id):
     if user.id == current_user.id:
         flash('You cannot delete your own account!', 'error')
         return redirect(url_for('manage_users'))
-    if user.assigned_cars.count() > 0:
+    # Check if user has assigned cars using direct query instead of relationship
+    if Car.query.filter_by(assigned_user_id=user.id).count() > 0:
         flash(f'Cannot delete "{user.username}" - they have jobs assigned.', 'error')
         return redirect(url_for('manage_users'))
     username = user.username
