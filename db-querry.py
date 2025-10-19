@@ -3,14 +3,34 @@ from app.models import User
 
 app = create_app()
 with app.app_context():
-    users = User.query.all()
-    print(f"Total users: {len(users)}\n")
-    for user in users:
-        print(f"ID: {user.id}")
-        print(f"Username: {user.username}")
-        print(f"Full Name: {user.full_name}")
-        print(f"Email: {user.email}")
-        print(f"Role: {user.role}")
-        print(f"Active: {user.is_active}")
-        print(f"Created: {user.created_at}")
-        print("-" * 50)
+    # Check if Mark exists
+    mark = User.query.filter_by(username='Mark').first()
+    if not mark:
+        mark = User(
+            username='Mark',
+            full_name='Mark John',
+            email='admin@crystalclean.com',
+            role='admin',
+            is_active=True
+        )
+        mark.set_password('johnmark')
+        db.session.add(mark)
+        db.session.commit()
+        print("✓ Mark created")
+    else:
+        print("Mark already exists")
+    
+    # Also create a staff user
+    staff = User.query.filter_by(username='Rachel').first()
+    if not staff:
+        staff = User(
+            username='Rachel',
+            full_name='Rachel Kirui',
+            email='kiruirachel@crystalclean.com',
+            role='staff',
+            is_active=True
+        )
+        staff.set_password('johnmark')
+        db.session.add(staff)
+        db.session.commit()
+        print("✓ Rachel created")
