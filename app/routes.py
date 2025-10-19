@@ -698,14 +698,23 @@ def delete_user(user_id):
     if user.id == current_user.id:
         flash('You cannot delete your own account!', 'error')
         return redirect(url_for('manage_users'))
-    # Check if user has assigned cars using direct query instead of relationship
     if Car.query.filter_by(assigned_user_id=user.id).count() > 0:
         flash(f'Cannot delete "{user.username}" - they have jobs assigned.', 'error')
         return redirect(url_for('manage_users'))
+    
     username = user.username
-    db.session.delete(user)
-    db.session.commit()
-    flash(f'User "{username}" deleted successfully!', 'success')
+    try:
+        # Delete associated notifications first
+        Notification.query.filter_by(user_id=user.id).delete()
+        
+        # Then delete the user
+        db.session.delete(user)
+        db.session.commit()
+        flash(f'User "{username}" deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting user: {str(e)}', 'error')
+    
     return redirect(url_for('manage_users'))
 
 
