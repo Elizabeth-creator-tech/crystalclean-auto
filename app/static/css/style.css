@@ -655,9 +655,9 @@ textarea.form-control {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('/static/uploads/crystalclean-login-bg.png') center center no-repeat;
+    /*background: url('/static/uploads/crystalclean-login-bg.png') center center no-repeat;*/
     background-size: cover;
-    background-color: #1e3a8a; /* fallback */
+    background-color: #1e3a8a; /* fallback if we dont have the bg photo */
     padding: 20px;
 }
 
