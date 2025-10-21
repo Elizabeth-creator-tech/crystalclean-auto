@@ -664,7 +664,7 @@ textarea.form-control {
 /* --- Responsive fix for smaller screens --- */
 @media only screen and (max-width: 768px) {
     .login-container {
-        background-image: url('/static/uploads/crystalclean-login-bg.png');
+        /*background-image: url('/static/uploads/crystalclean-login-bg.png'); */
         background-size: contain !important;
         background-position: top center !important;
         background-repeat: no-repeat;
