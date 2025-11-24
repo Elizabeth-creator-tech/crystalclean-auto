@@ -1,4 +1,4 @@
-/* ===== ROOT VARIABLES - DARK THEME ===== */
+  /*  ROOT VARIABLES - DARK THEME  */
 :root {
     --primary-color: #3b82f6;
     --primary-dark: #2563eb;
@@ -23,7 +23,7 @@
     --radius-lg: 12px;
 }
 
-/* ===== RESET & BASE ===== */
+/*  RESET & BASE  */
 * {
     margin: 0;
     padding: 0;
@@ -40,7 +40,7 @@ body {
     flex-direction: column;
 }
 
-/* ===== FLASH MESSAGES ===== */
+/*  FLASH MESSAGES  */
 .flash-container {
     position: fixed;
     top: 20px;
@@ -109,7 +109,7 @@ body {
     }
 }
 
-/* ===== NAVIGATION ===== */
+/*  NAVIGATION  */
 .navbar {
     background-color: var(--white);
     box-shadow: var(--shadow-md);
@@ -215,7 +215,7 @@ body {
     color: var(--text-dark);
 }
 
-/* ===== MAIN CONTENT ===== */
+/*  MAIN CONTENT  */
 .main-content {
     flex: 1;
     max-width: 1400px;
@@ -224,7 +224,7 @@ body {
     padding: 32px 24px;
 }
 
-/* ===== BUTTONS ===== */
+/*  BUTTONS  */
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -301,7 +301,7 @@ body {
     font-size: 16px;
 }
 
-/* ===== CARDS ===== */
+/*  CARDS  */
 .card {
     background-color: var(--white);
     border-radius: var(--radius-lg);
@@ -332,7 +332,7 @@ body {
     padding: 0;
 }
 
-/* ===== FORMS ===== */
+/*  FORMS  */
 .form-group {
     margin-bottom: 20px;
 }
@@ -389,7 +389,7 @@ textarea.form-control {
     gap: 20px;
 }
 
-/* ===== TABLES ===== */
+/*  TABLES  */
 .table-responsive {
     overflow-x: auto;
 }
@@ -426,7 +426,7 @@ textarea.form-control {
     background-color: #0f172a;
 }
 
-/* ===== BADGES ===== */
+/*  BADGES  */
 .badge {
     display: inline-block;
     padding: 4px 12px;
@@ -468,7 +468,7 @@ textarea.form-control {
     color: #fca5a5;
 }
 
-/* ===== STATS CARDS ===== */
+/*  STATS CARDS  */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -519,14 +519,14 @@ textarea.form-control {
     line-height: 1;
 }
 
-/* ===== ACTION BUTTONS GROUP ===== */
+/*  ACTION BUTTONS GROUP  */
 .action-buttons {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
 }
 
-/* ===== SEARCH BAR ===== */
+/*  SEARCH BAR  */
 .search-bar {
     position: relative;
 }
@@ -543,7 +543,7 @@ textarea.form-control {
     color: var(--text-light);
 }
 
-/* ===== MODAL ===== */
+/*  MODAL  */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -629,7 +629,7 @@ textarea.form-control {
     }
 }
 
-/* ===== FOOTER ===== */
+/*  FOOTER  */
 .footer {
     background-color: var(--white);
     padding: 24px;
@@ -639,7 +639,7 @@ textarea.form-control {
     margin-top: auto;
 }
 
-/* ===== DASHBOARD HEADER ===== */
+/*  DASHBOARD HEADER  */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -723,7 +723,7 @@ textarea.form-control {
     }
 }
 
-/* ===== EMPTY STATE ===== */
+/*  EMPTY STATE  */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -747,7 +747,7 @@ textarea.form-control {
     margin-bottom: 24px;
 }
 
-/* ===== UTILITIES ===== */
+/*  UTILITIES  */
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .mt-1 { margin-top: 8px; }
@@ -760,7 +760,7 @@ textarea.form-control {
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .gap-2 { gap: 16px; }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/*  RESPONSIVE DESIGN  */
 @media (max-width: 992px) {
     .stats-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

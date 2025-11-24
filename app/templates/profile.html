@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - CrystalClean Auto{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <div class="card-header">
+        <h2 class="card-title">My Profile</h2>
+        <span class="badge {% if current_user.role == 'admin' %}badge-admin{% else %}badge-staff{% endif %}">
+            {{ current_user.role.upper() }}
+        </span>
+    </div>
+    
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('update_profile') }}">
+            {{ form.hidden_tag() }}
+            
+            <!-- Full Name -->
+            <div class="form-group">
+                <label class="form-label" for="full_name">Full Name</label>
+                {% if form.full_name.errors %}
+                    {{ form.full_name(class="form-control") }}
+                    <div class="form-error">
+                        {% for error in form.full_name.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.full_name(class="form-control") }}
+                {% endif %}
+            </div>
+            
+            <!-- Email -->
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                {% if form.email.errors %}
+                    {{ form.email(class="form-control") }}
+                    <div class="form-error">
+                        {% for error in form.email.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email(class="form-control") }}
+                {% endif %}
+            </div>
+            
+            <!-- Username (Display only) -->
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" value="{{ current_user.username }}" disabled>
+                <small style="color: var(--text-light); margin-top: 4px; display: block;">
+                    Username cannot be changed
+                </small>
+            </div>
+            
+            <!-- Role (Only for admins) -->
+            {% if current_user.role == 'admin' %}
+            <div class="form-group">
+                <label class="form-label" for="role">Role</label>
+                {{ form.role(class="form-control") }}
+                <small style="color: var(--text-light); margin-top: 4px; display: block;">
+                    ⚠️ Changing your role will log you out. You'll need to log in again with your new permissions.
+                </small>
+            </div>
+            {% else %}
+            <div class="form-group">
+                <label class="form-label">Role</label>
+                <input type="text" class="form-control" value="STAFF" disabled>
+            </div>
+            {% endif %}
+            
+            <!-- Divider -->
+            <hr style="border-color: var(--border-color); margin: 24px 0;">
+            
+            <!-- Current Password Verification -->
+            <div class="form-group">
+                <label class="form-label" for="current_password">Current Password <span style="color: var(--danger-color);">*</span></label>
+                {% if form.current_password.errors %}
+                    {{ form.current_password(class="form-control") }}
+                    <div class="form-error">
+                        {% for error in form.current_password.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.current_password(class="form-control", placeholder="Enter your current password to verify changes") }}
+                {% endif %}
+            </div>
+            
+            <!-- New Password -->
+            <div class="form-group">
+                <label class="form-label" for="new_password">New Password <span style="color: var(--text-light);">(optional)</span></label>
+                {% if form.new_password.errors %}
+                    {{ form.new_password(class="form-control") }}
+                    <div class="form-error">
+                        {% for error in form.new_password.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.new_password(class="form-control", placeholder="Leave blank to keep current password") }}
+                {% endif %}
+            </div>
+            
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label class="form-label" for="confirm_password">Confirm New Password</label>
+                {% if form.confirm_password.errors %}
+                    {{ form.confirm_password(class="form-control") }}
+                    <div class="form-error">
+                        {% for error in form.confirm_password.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.confirm_password(class="form-control") }}
+                {% endif %}
+            </div>
+            
+            <!-- Buttons -->
+            <div class="form-group" style="display: flex; gap: 12px; margin-top: 32px;">
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+                <a href="{% if current_user.role == 'admin' %}{{ url_for('admin_dashboard') }}{% else %}{{ url_for('staff_dashboard') }}{% endif %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Optional: Account Info Summary -->
+<div class="card" style="max-width: 600px; margin: 24px auto 0;">
+    <div class="card-header">
+        <h3 class="card-title">Account Information</h3>
+    </div>
+    <div class="card-body">
+        <div style="display: grid; gap: 16px;">
+            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-light);">Username:</span>
+                <span style="font-weight: 600;">{{ current_user.username }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-light);">Role:</span>
+                <span class="badge {% if current_user.role == 'admin' %}badge-admin{% else %}badge-staff{% endif %}">
+                    {{ current_user.role.upper() }}
+                </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-light);">Member Since:</span>
+                <span style="font-weight: 600;">{{ current_user.created_at.strftime('%B %d, %Y') }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-light);">Account Status:</span>
+                <span class="badge {% if current_user.is_active %}badge-completed{% else %}badge-cancelled{% endif %}">
+                    {{ 'ACTIVE' if current_user.is_active else 'INACTIVE' }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

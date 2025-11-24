@@ -1,0 +1,57 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0369a1"/>
+            <stop offset="100%" stop-color="#0ea5e9"/>
+        </linearGradient>
+        <linearGradient id="carGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f8fafc"/>
+            <stop offset="100%" stop-color="#e2e8f0"/>
+        </linearGradient>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.15"/>
+        </filter>
+    </defs>
+    
+    <!-- Background Circle -->
+    <circle cx="16" cy="16" r="15" fill="url(#bgGrad)"/>
+    
+    <!-- Car Body - More Realistic -->
+    <g filter="url(#shadow)">
+        <!-- Main body -->
+        <rect x="6" y="13" width="20" height="8" rx="1" fill="url(#carGrad)" stroke="#64748b" stroke-width="0.8"/>
+        
+        <!-- Cabin/Windshield area -->
+        <path d="M 10 13 Q 10 9 14 8 L 18 8 Q 22 9 22 13" fill="url(#carGrad)" stroke="#64748b" stroke-width="0.8"/>
+        
+        <!-- Window glass effect -->
+        <path d="M 11 10 Q 11 9.5 13.5 8.8 L 18 8.8 Q 20.5 9.5 21 10" fill="#e0f2fe" opacity="0.6"/>
+    </g>
+    
+    <!-- Wheels -->
+    <circle cx="10" cy="21.5" r="2.5" fill="#1e293b" stroke="#0f172a" stroke-width="0.5"/>
+    <circle cx="22" cy="21.5" r="2.5" fill="#1e293b" stroke="#0f172a" stroke-width="0.5"/>
+    
+    <!-- Wheel details -->
+    <circle cx="10" cy="21.5" r="1.2" fill="none" stroke="#64748b" stroke-width="0.4"/>
+    <circle cx="22" cy="21.5" r="1.2" fill="none" stroke="#64748b" stroke-width="0.4"/>
+    
+    <!-- Water Stream (washing effect) -->
+    <path d="M 12 6 Q 12 8 11 10" stroke="#bfdbfe" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 16 5 Q 16 8 16 10.5" stroke="#7dd3fc" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.9"/>
+    <path d="M 20 6 Q 20 8 21 10" stroke="#bfdbfe" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.8"/>
+    
+    <!-- Water droplets -->
+    <circle cx="11" cy="11" r="0.6" fill="#06b6d4" opacity="0.8"/>
+    <circle cx="16" cy="11.2" r="0.7" fill="#06b6d4" opacity="0.9"/>
+    <circle cx="21" cy="11" r="0.6" fill="#06b6d4" opacity="0.8"/>
+    
+    <!-- Sparkle/shine effect -->
+    <g opacity="0.9">
+        <circle cx="8" cy="12" r="0.8" fill="#fef3c7"/>
+        <circle cx="8.8" cy="11.2" r="0.4" fill="#fcd34d"/>
+    </g>
+    
+    <!-- Top shine on windshield -->
+    <ellipse cx="16" cy="8.5" rx="3" ry="0.8" fill="#fef08a" opacity="0.6"/>
+</svg>

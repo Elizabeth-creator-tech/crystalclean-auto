@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SelectField, TextAreaField, FloatField, IntegerField
 from wtforms.validators import DataRequired, Email, Length, Optional, ValidationError, EqualTo
 from app.models import User, Service, Car
+from flask_login import current_user
 
 
 class LoginForm(FlaskForm):
@@ -142,3 +143,33 @@ class UpdateStatusForm(FlaskForm):
         ('Ready for Pickup', 'Ready for Pickup'),
         ('Completed', 'Completed')
     ], validators=[DataRequired()])
+
+#USERS CAN CHANGE PROFILE/EDIT
+class UpdateProfileForm(FlaskForm):
+    """Form for users to update their own profile"""
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(max=120)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    current_password = PasswordField('Current Password (required for verification)', validators=[DataRequired()])
+    new_password = PasswordField('New Password (leave blank to keep current)', validators=[Optional(), Length(min=6)])
+    confirm_password = PasswordField('Confirm New Password', validators=[Optional()])
+    role = SelectField('Role', choices=[('admin', 'Admin'), ('staff', 'Staff')], validators=[Optional()])
+    
+    def validate_new_password(self, field):
+        """Validate new password if provided"""
+        if field.data and not self.confirm_password.data:
+            raise ValidationError('Please confirm your new password.')
+    
+    def validate_confirm_password(self, field):
+        """Validate password confirmation matches"""
+        if field.data and field.data != self.new_password.data:
+            raise ValidationError('Passwords do not match.')
+    
+    def validate_email(self, field):
+        """Check if email is already used by another user"""
+        # Import here to avoid circular imports
+        from app.models import User
+        from flask_login import current_user
+        
+        existing = User.query.filter_by(email=field.data.strip()).first()
+        if existing and existing.id != current_user.id:
+            raise ValidationError('This email is already registered by another user.')

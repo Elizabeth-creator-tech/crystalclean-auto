@@ -6,7 +6,7 @@ from datetime import datetime, date, timedelta
 from app import db
 from app.models import User, Service, Car, Notification, ArchivedJob #classes
 from app.forms import (LoginForm, AddCarForm, EditCarForm, AddServiceForm, 
-                       EditServiceForm, AddUserForm, EditUserForm, UpdateStatusForm)
+                       EditServiceForm, AddUserForm, EditUserForm, UpdateStatusForm, UpdateProfileForm)
 from app.utils import admin_required, send_notification
 
 def kenya_time(dt):
@@ -109,13 +109,14 @@ def login():
         
         if not user.is_active:
             print("LOGIN FAILED: User inactive")
-            flash(Markup('Your account was deactivated. Please contact admin at <a href="mailto:admin@crystalclean.com">admin@crystalclean.com</a>'), 'error')
+            flash(Markup('Your account was deactivated. Please contact admin at <a href="mailto:murabulaelizabeth@gmail.com">murabulaelizabeth@gmail.com</a>'), 'error')
             return redirect(url_for('login'))
         
         print(f"LOGIN SUCCESS: Logging in user {user.username}")
         login_user(user, remember=form.remember_me.data)
         flash(f'Welcome back, {user.full_name}!', 'success')
         
+        # login logoic
         if user.role == 'admin':
             return redirect(url_for('admin_dashboard'))
         return redirect(url_for('staff_dashboard'))
@@ -429,9 +430,7 @@ def staff_dashboard():
 
 
 # CAR/JOB MANAGEMENT
-
-
-@app.route('/cars/add', methods=['GET', 'POST'])
+@app.route('/cars/add', methods=['GET', 'POST']) #adding  job
 @login_required
 @admin_required
 def add_car():
@@ -650,6 +649,69 @@ def manage_users():
                          users=users, 
                          add_form=add_form, 
                          edit_form=edit_form)
+
+
+#USERS PROFILE LOGIC
+# USER PROFILE
+
+
+@app.route('/profile')
+@login_required
+def view_profile():
+    """View user's own profile"""
+    form = UpdateProfileForm()
+    # Pre-fill form with current user data
+    form.full_name.data = current_user.full_name
+    form.email.data = current_user.email
+    if current_user.role == 'admin':
+        form.role.data = current_user.role
+    
+    return render_template('profile.html', form=form, user=current_user)
+
+
+@app.route('/profile/update', methods=['POST'])
+@login_required
+def update_profile():
+    """Update user's own profile"""
+    form = UpdateProfileForm()
+    
+    # Validate current password
+    if not current_user.check_password(form.current_password.data):
+        flash('Current password is incorrect.', 'error')
+        return redirect(url_for('view_profile'))
+    
+    if form.validate_on_submit():
+        # Update basic info
+        current_user.full_name = form.full_name.data
+        current_user.email = form.email.data.strip()
+        
+        # Update password if provided
+        if form.new_password.data:
+            current_user.set_password(form.new_password.data)
+            flash('Password updated successfully!', 'success')
+        
+        # Admin can change their own role
+        old_role = current_user.role
+        if current_user.role == 'admin' and form.role.data:
+            current_user.role = form.role.data
+            
+            # If admin changed their own role, they need to logout
+            if old_role != form.role.data:
+                db.session.commit()
+                logout_user()
+                flash(f'Your role has been changed to {form.role.data}. Please log in again.', 'info')
+                return redirect(url_for('login'))
+        
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('staff_dashboard'))
+    else:
+        # Show validation errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f'{field}: {error}', 'error')
+    
+    return redirect(url_for('view_profile'))
 
 
 @app.route('/users/add', methods=['POST'])
