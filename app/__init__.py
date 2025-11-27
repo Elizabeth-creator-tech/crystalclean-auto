@@ -29,7 +29,7 @@ def create_app(config_class=Config):
 def create_default_users():
     from app.models import User
     
-    print("========== STARTING USER CREATION ==========")
+    print(" STARTING USER CREATION ")
     
     users_to_create = [
         {
@@ -51,13 +51,21 @@ def create_default_users():
     for user_data in users_to_create:
         print(f"Processing user: {user_data['username']}")
         try:
-            existing_user = User.query.filter_by(username=user_data['username']).first()
+            existing_user = User.query.filter(
+                (User.username == user_data['username']) | 
+                (User.email == user_data['email'])
+            ).first()
+            
             print(f"Existing user check: {existing_user}")
             
             if existing_user:
-                print(f"⊘ User exists: {user_data['username']}, updating password...")
+                print(f"⊘ User exists: {existing_user.username}, updating to {user_data['username']}...")
+                existing_user.username = user_data['username']
+                existing_user.full_name = user_data['full_name']
+                existing_user.email = user_data['email']
                 existing_user.set_password(user_data['password'])
                 existing_user.role = user_data['role']
+                existing_user.is_active = True
                 db.session.commit()
                 print(f"✓ Updated user: {user_data['username']} as {user_data['role']}")
             else:
@@ -70,16 +78,12 @@ def create_default_users():
                     is_active=True
                 )
                 user.set_password(user_data['password'])
-                print(f"Password set for: {user_data['username']}")
                 db.session.add(user)
-                print(f"User added to session: {user_data['username']}")
                 db.session.commit()
                 print(f"✓ Created new user: {user_data['username']} as {user_data['role']}")
                 
         except Exception as e:
             print(f"✗ ERROR with {user_data['username']}: {str(e)}")
-            import traceback
-            traceback.print_exc()
             db.session.rollback()
     
-    print("========== USER CREATION COMPLETE ==========")
+    print("USER CREATION COMPLETE")
