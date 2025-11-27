@@ -46,35 +46,30 @@ def create_default_users():
         }
     ]
     
-    with db.session.no_autoflush:
-        for user_data in users_to_create:
-            try:
-                existing_user = User.query.filter(
-                    (User.username == user_data['username']) | 
-                    (User.email == user_data['email'])
-                ).first()
+    for user_data in users_to_create:
+        try:
+            existing_user = User.query.filter_by(username=user_data['username']).first()
+            
+            if existing_user:
+                print(f"⊘ User exists: {user_data['username']}, updating password...")
+                existing_user.set_password(user_data['password'])
+                db.session.commit()
+                print(f"✓ Password updated for: {user_data['username']}")
+            else:
+                user = User(
+                    username=user_data['username'],
+                    full_name=user_data['full_name'],
+                    email=user_data['email'],
+                    role=user_data['role'],
+                    is_active=True
+                )
+                user.set_password(user_data['password'])
+                db.session.add(user)
+                db.session.commit()
+                print(f"✓ Created new user: {user_data['username']}")
                 
-                if not existing_user:
-                    user = User(
-                        username=user_data['username'],
-                        full_name=user_data['full_name'],
-                        email=user_data['email'],
-                        role=user_data['role'],
-                        is_active=True
-                    )
-                    user.set_password(user_data['password'])
-                    db.session.add(user)
-                    print(f"✓ Created user: {user_data['username']}")
-                else:
-                    print(f"⊘ User already exists: {user_data['username']}")
-                    
-            except Exception as e:
-                print(f"✗ Error creating {user_data['username']}: {str(e)}")
-                db.session.rollback()
+        except Exception as e:
+            print(f"✗ Error with {user_data['username']}: {str(e)}")
+            db.session.rollback()
     
-    try:
-        db.session.commit()
-        print("✓ All users processed successfully")
-    except Exception as e:
-        db.session.rollback()
-        print(f"✗ Error committing users: {str(e)}")
+    print("✓ All users processed")
