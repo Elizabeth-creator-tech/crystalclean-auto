@@ -29,6 +29,8 @@ def create_app(config_class=Config):
 def create_default_users():
     from app.models import User
     
+    print("========== STARTING USER CREATION ==========")
+    
     users_to_create = [
         {
             'username': 'Mark',
@@ -47,15 +49,19 @@ def create_default_users():
     ]
     
     for user_data in users_to_create:
+        print(f"Processing user: {user_data['username']}")
         try:
             existing_user = User.query.filter_by(username=user_data['username']).first()
+            print(f"Existing user check: {existing_user}")
             
             if existing_user:
                 print(f"⊘ User exists: {user_data['username']}, updating password...")
                 existing_user.set_password(user_data['password'])
+                existing_user.role = user_data['role']
                 db.session.commit()
-                print(f"✓ Password updated for: {user_data['username']}")
+                print(f"✓ Updated user: {user_data['username']} as {user_data['role']}")
             else:
+                print(f"Creating new user: {user_data['username']}")
                 user = User(
                     username=user_data['username'],
                     full_name=user_data['full_name'],
@@ -64,12 +70,16 @@ def create_default_users():
                     is_active=True
                 )
                 user.set_password(user_data['password'])
+                print(f"Password set for: {user_data['username']}")
                 db.session.add(user)
+                print(f"User added to session: {user_data['username']}")
                 db.session.commit()
-                print(f"✓ Created new user: {user_data['username']}")
+                print(f"✓ Created new user: {user_data['username']} as {user_data['role']}")
                 
         except Exception as e:
-            print(f"✗ Error with {user_data['username']}: {str(e)}")
+            print(f"✗ ERROR with {user_data['username']}: {str(e)}")
+            import traceback
+            traceback.print_exc()
             db.session.rollback()
     
-    print("✓ All users processed")
+    print("========== USER CREATION COMPLETE ==========")
