@@ -123,6 +123,26 @@ def login():
     
     return render_template('login.html', form=form)
 
+@app.route('/debug-login', methods=['POST'])
+def debug_login():
+    from flask import request
+    from app.models import User
+    
+    username = request.form.get('username', '').strip()
+    password = request.form.get('password', '').strip()
+    
+    user = User.query.filter_by(username=username).first()
+    
+    debug_info = {
+        'username_received': repr(username),
+        'username_length': len(username),
+        'password_length': len(password),
+        'user_found': user is not None,
+        'user_is_active': user.is_active if user else None,
+        'password_check': user.check_password(password) if user else None
+    }
+    
+    return debug_info
 
 @app.route('/logout')
 @login_required
