@@ -3,25 +3,40 @@
 {% block title %}Reports - CrystalClean Auto{% endblock %}
 
 {% block content %}
-<div class="dashboard-header" style="margin-bottom: 32px;">
+
+<div class="page-header">
     <div>
-        <h1 style="font-size: 32px; font-weight: 800; color: var(--text-dark);">Today's Reports</h1>
-        <p style="color: var(--text-light); margin-top: 8px;">Current day performance insights</p>
+        <h1 class="page-title">Today's Reports</h1>
+        <p class="page-subtitle">Current day performance insights</p>
     </div>
-    <a href="{{ url_for('analytics') }}" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea, #764ba2); border: none;">
-         View Full Analytics
+    <a href="{{ url_for('analytics') }}" class="btn btn-primary"
+        style="background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);">
+        <i class="fas fa-chart-line" style="margin-right: 8px;"></i> View Full Analytics
     </a>
 </div>
 
 <!-- Daily Statistics -->
 <div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-label">Jobs Today</div>
-        <div class="stat-value">{{ daily_jobs }}</div>
+    <!-- Jobs Today -->
+    <div class="card-stat">
+        <div class="stat-icon icon-blue">
+            <i class="fas fa-car"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Jobs Today</div>
+            <div class="stat-value">{{ daily_jobs }}</div>
+        </div>
     </div>
-    <div class="stat-card stat-success">
-        <div class="stat-label">Revenue Today</div>
-        <div class="stat-value">KSh {{ '{:,.0f}'.format(daily_revenue) }}</div>
+
+    <!-- Revenue Today -->
+    <div class="card-stat border-left-success">
+        <div class="stat-icon icon-green">
+            <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Revenue Today</div>
+            <div class="stat-value">KSh {{ '{:,.0f}'.format(daily_revenue) }}</div>
+        </div>
     </div>
 </div>
 
@@ -52,7 +67,9 @@
         </div>
         {% else %}
         <div class="empty-state">
-            <div class="empty-state-icon"></div>
+            <div class="empty-state-icon">
+                <i class="fas fa-user-friends"></i>
+            </div>
             <h3 class="empty-state-title">No Data Yet</h3>
             <p class="empty-state-text">Staff performance data will appear here when jobs are completed</p>
         </div>
@@ -63,7 +80,7 @@
 <!-- Popular Services -->
 <div class="card">
     <div class="card-header">
-        <h2 class="card-title">Most Popular Services (All Time)</h2>
+        <h2 class="card-title">Most Popular Services</h2>
     </div>
     <div class="card-body">
         {% if popular_services %}
@@ -87,7 +104,9 @@
         </div>
         {% else %}
         <div class="empty-state">
-            <div class="empty-state-icon"></div>
+            <div class="empty-state-icon">
+                <i class="fas fa-chart-pie"></i>
+            </div>
             <h3 class="empty-state-title">No Data Yet</h3>
             <p class="empty-state-text">Service statistics will appear here</p>
         </div>
@@ -96,12 +115,14 @@
 </div>
 
 <!-- Link to Full Analytics -->
-<div class="card" style="background-color: black; color: white; text-align: center;">
-    <div class="card-body">
-        <h3 style="color: white; margin-bottom: 12px;">Want to see more detailed analytics?</h3>
-        <p style="opacity: 0.95; margin-bottom: 20px;">View customer insights, staff performance history, and comprehensive business reports.</p>
-        <a href="{{ url_for('analytics') }}" class="btn" style="background-color: blue; color: white; font-weight: 700; padding: 15px 32px;">
-            View Full Analytics
+<div class="card"
+    style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; text-align: center;">
+    <div class="card-body" style="padding: 3rem 2rem;">
+        <h3 style="color: white; margin-bottom: 0.5rem; font-size: 1.5rem;">Want deeper insights?</h3>
+        <p style="opacity: 0.8; margin-bottom: 2rem; color: #cbd5e1;">View customer trends, historical revenue, and
+            staff efficiency metrics.</p>
+        <a href="{{ url_for('analytics') }}" class="btn btn-primary btn-lg">
+            Explore Full Analytics
         </a>
     </div>
 </div>

@@ -1,79 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CrystalClean Auto{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+    <!-- Font Awesome 6 for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- SVG Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
 </head>
-<body>
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-container">
-                {% for category, message in messages %}
-                    <div class="flash-message flash-{{ category }}">
-                        <span>{{ message }}</span>
-                        <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    <!-- Navigation -->
-    {% if current_user.is_authenticated %}
-<nav class="navbar">
-    <div class="nav-container">
-        <!-- Brand Logo and Name -->
-        <div class="nav-brand">
-            <img src="{{ url_for('static', filename='images/favicon.svg') }}" alt="CrystalClean Logo" class="logo">
-            <span class="brand-name">CrystalClean Auto</span>
-        </div>
-        <!-- Hamburger Menu Button (only visible on mobile) -->
-        <button class="hamburger" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <!-- Navigation Menu -->
-        <ul class="nav-menu">
-            {% if current_user.is_authenticated %}
-                {% if current_user.role == 'admin' %}
-                
-                    <li><a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">Dashboard</a></li>
-                    
-                    <li><a href="{{ url_for('add_car') }}" class="nav-link">Add Job</a></li>
-                    <li><a href="{{ url_for('manage_services') }}" class="nav-link">Services</a></li>
-                    <li><a href="{{ url_for('manage_users') }}" class="nav-link">Users</a></li>
-                    <li><a href="{{ url_for('reports') }}" class="nav-link">Reports</a></li>
-                    <li><a href="{{ url_for('analytics') }}" class="nav-link">Analytics</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('staff_dashboard') }}" class="nav-link">View Jobs</a></li>
-                {% endif %}
-                <!-- REPLACE THIS SECTION IN base.html -->
 
-                <div class="nav-user">
-                    <span class="user-name">{{ current_user.username }}</span>
-                    <a href="{{ url_for('view_profile') }}" class="btn btn-sm btn-primary">Profile</a>
-                    <a href="{{ url_for('logout') }}" class="btn btn-sm btn-danger">Logout</a>
-                </div>
-            {% endif %}
-        </ul>
+<body>
+    <!-- Flash Messages (Centered & Professional) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()"
+                style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:inherit;">&times;</button>
+        </div>
+        {% endfor %}
     </div>
-</nav>
     {% endif %}
+    {% endwith %}
+
+    {% if current_user.is_authenticated %}
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Brand -->
+            <a href="{{ url_for('admin_dashboard') if current_user.role == 'admin' else url_for('staff_dashboard') }}"
+                class="nav-brand">
+                <img src="{{ url_for('static', filename='images/favicon.svg') }}" alt="Logo" class="logo">
+                <span>CrystalClean</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <ul class="nav-menu">
+                {% if current_user.role == 'admin' %}
+                <li><a href="{{ url_for('admin_dashboard') }}"
+                        class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">Dashboard</a>
+                </li>
+                <li><a href="{{ url_for('add_car') }}"
+                        class="nav-link {% if request.endpoint == 'add_car' %}active{% endif %}">New Job</a></li>
+                <li><a href="{{ url_for('manage_services') }}"
+                        class="nav-link {% if request.endpoint == 'manage_services' %}active{% endif %}">Services</a>
+                </li>
+                <li><a href="{{ url_for('manage_users') }}"
+                        class="nav-link {% if request.endpoint == 'manage_users' %}active{% endif %}">Staff</a></li>
+                <li><a href="{{ url_for('reports') }}"
+                        class="nav-link {% if request.endpoint == 'reports' %}active{% endif %}">Reports</a></li>
+                <li><a href="{{ url_for('analytics') }}"
+                        class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}">Analytics</a></li>
+                {% else %}
+                <li><a href="{{ url_for('staff_dashboard') }}"
+                        class="nav-link {% if request.endpoint == 'staff_dashboard' %}active{% endif %}">My Jobs</a>
+                </li>
+                <li><a href="{{ url_for('add_car') }}"
+                        class="nav-link {% if request.endpoint == 'add_car' %}active{% endif %}">Add Job</a></li>
+                {% endif %}
+            </ul>
+
+            <!-- Desktop Right (Profile) -->
+            <div class="nav-right">
+                <span style="font-size: 0.9rem; color: var(--text-secondary);">{{ current_user.username }}</span>
+                <a href="{{ url_for('view_profile') }}" class="btn btn-sm btn-primary">Profile</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-secondary">Logout</a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="hamburger" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay (Hidden by default) -->
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="padding: 1rem; border-bottom: 1px solid var(--border-light); margin-bottom: 0.5rem;">
+                <strong>{{ current_user.username }}</strong>
+            </div>
+            <a href="{{ url_for('view_profile') }}" class="mobile-menu-link">My Profile</a>
+            {% if current_user.role == 'admin' %}
+            <a href="{{ url_for('manage_services') }}" class="mobile-menu-link">Services</a>
+            <a href="{{ url_for('manage_users') }}" class="mobile-menu-link">Staff Management</a>
+            <a href="{{ url_for('analytics') }}" class="mobile-menu-link">Analytics</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" class="mobile-menu-link" style="color: var(--danger);">Logout</a>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Main Content -->
     <main class="main-content">
-        {% block content %}<!-- Each HTML file which inherits this base.html -->{% endblock %}
+        {% block content %}{% endblock %}
     </main>
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2025 CrystalClean Auto. All rights reserved.</p>
-    </footer>
+
+    <!-- Mobile Bottom Nav (Visible only on mobile) -->
+    {% if current_user.is_authenticated %}
+    <nav class="mobile-bottom-nav">
+        {% if current_user.role == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}"
+            class="bottom-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="{{ url_for('add_car') }}" class="bottom-link {% if request.endpoint == 'add_car' %}active{% endif %}">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Job</span>
+        </a>
+        <a href="{{ url_for('reports') }}" class="bottom-link {% if request.endpoint == 'reports' %}active{% endif %}">
+            <i class="fas fa-file-alt"></i>
+            <span>Reports</span>
+        </a>
+        {% else %}
+        <a href="{{ url_for('staff_dashboard') }}"
+            class="bottom-link {% if request.endpoint == 'staff_dashboard' %}active{% endif %}">
+            <i class="fas fa-list"></i>
+            <span>My Jobs</span>
+        </a>
+        <a href="{{ url_for('add_car') }}" class="bottom-link {% if request.endpoint == 'add_car' %}active{% endif %}">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Job</span>
+        </a>
+        {% endif %}
+        <!-- Expanded Menu Toggle via Bottom Nav as well if desired, or just keep Hamburger top right -->
+        <button class="bottom-link" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+            <span>More</span>
+        </button>
+    </nav>
+    {% endif %}
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
     {% block scripts %}{% endblock %}
 </body>
+
 </html>

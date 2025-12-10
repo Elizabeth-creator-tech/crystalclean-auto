@@ -335,3 +335,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// ===============================
+// MOBILE BOTTOM NAVIGATION
+// ===============================
+document.addEventListener('DOMContentLoaded', function() {
+    const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+    const currentPath = window.location.pathname;
+    
+    // Set active state based on current URL
+    bottomNavItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && href !== '#' && currentPath.includes(href)) {
+            item.classList.add('active');
+        }
+        
+        // Add touch feedback
+        item.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        item.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Connect More button to hamburger menu
+    const moreButtons = document.querySelectorAll('.bottom-nav-item[onclick*="hamburger"]');
+    moreButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const hamburger = document.querySelector('.hamburger');
+            if (hamburger) {
+                hamburger.click();
+            }
+        });
+    });
+});

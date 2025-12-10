@@ -59,7 +59,7 @@ def create_default_users():
             print(f"Existing user check: {existing_user}")
             
             if existing_user:
-                print(f"⊘ User exists: {existing_user.username}, updating to {user_data['username']}...")
+                print(f"[*] User exists: {existing_user.username}, updating to {user_data['username']}...")
                 existing_user.username = user_data['username']
                 existing_user.full_name = user_data['full_name']
                 existing_user.email = user_data['email']
@@ -67,7 +67,7 @@ def create_default_users():
                 existing_user.role = user_data['role']
                 existing_user.is_active = True
                 db.session.commit()
-                print(f"✓ Updated user: {user_data['username']} as {user_data['role']}")
+                print(f"[OK] Updated user: {user_data['username']} as {user_data['role']}")
             else:
                 print(f"Creating new user: {user_data['username']}")
                 user = User(
@@ -80,10 +80,10 @@ def create_default_users():
                 user.set_password(user_data['password'])
                 db.session.add(user)
                 db.session.commit()
-                print(f"✓ Created new user: {user_data['username']} as {user_data['role']}")
+                print(f"[OK] Created new user: {user_data['username']} as {user_data['role']}")
                 
         except Exception as e:
-            print(f"✗ ERROR with {user_data['username']}: {str(e)}")
+            print(f"[ERROR] with {user_data['username']}: {str(e)}")
             db.session.rollback()
     
     print("USER CREATION COMPLETE")

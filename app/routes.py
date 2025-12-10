@@ -322,7 +322,7 @@ def analytics():
         db.desc('visits')
     ).limit(10).all()
     
-    # Staff performance (all time)
+    # Staff performance
     staff_stats = db.session.query(
         ArchivedJob.staff_name,
         db.func.count(ArchivedJob.id).label('jobs_done'),
@@ -843,7 +843,7 @@ def reports():
         Car.time_out <= end_of_day_utc
     ).group_by(User.id, User.full_name).all()
     
-    # Popular services (all time)
+    # Popular services
     popular_services = db.session.query(
         Service.name,
         db.func.count(Car.id).label('times_booked')

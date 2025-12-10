@@ -31,26 +31,31 @@
                 <tbody>
                     {% for user in users %}
                     <tr>
-                        <td><strong>{{ user.username }}</strong></td>
-                        <td>{{ user.full_name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                            <span class="badge {% if user.role == 'admin' %}badge-ready{% else %}badge-washing{% endif %}">
+                        <td data-label="Username"><strong>{{ user.username }}</strong></td>
+                        <td data-label="Full Name">{{ user.full_name }}</td>
+                        <td data-label="Email">{{ user.email }}</td>
+                        <td data-label="Role">
+                            <span
+                                class="badge {% if user.role == 'admin' %}badge-pending{% else %}badge-completed{% endif %}">
                                 {{ user.role.upper() }}
                             </span>
                         </td>
-                        <td>
-                            <span class="badge {% if user.is_active %}badge-ready{% else %}badge-cancelled{% endif %}">
+                        <td data-label="Status">
+                            <span
+                                class="badge {% if user.is_active %}badge-completed{% else %}badge-in-progress{% endif %}">
                                 {% if user.is_active %}Active{% else %}Inactive{% endif %}
                             </span>
                         </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-sm btn-secondary" onclick="openEditUserModal({{ user.id }}, '{{ user.username }}', '{{ user.full_name }}', '{{ user.email }}', '{{ user.role }}', {{ user.is_active|lower }})">
+                        <td data-label="Actions">
+                            <div class="action-buttons" style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                <button class="btn btn-sm btn-secondary"
+                                    onclick="openEditUserModal({{ user.id }}, '{{ user.username }}', '{{ user.full_name }}', '{{ user.email }}', '{{ user.role }}', {{ user.is_active|lower }})">
                                     Edit
                                 </button>
                                 {% if user.id != current_user.id %}
-                                <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}"
+                                    style="display: inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this user?')">
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
                                 {% endif %}
@@ -179,35 +184,35 @@
 
 {% block scripts %}
 <script>
-function openAddUserModal() {
-    document.getElementById('addUserModal').classList.add('active');
-}
+    function openAddUserModal() {
+        document.getElementById('addUserModal').classList.add('active');
+    }
 
-function closeAddUserModal() {
-    document.getElementById('addUserModal').classList.remove('active');
-}
+    function closeAddUserModal() {
+        document.getElementById('addUserModal').classList.remove('active');
+    }
 
-function openEditUserModal(id, username, fullName, email, role, isActive) {
-    document.getElementById('edit_username').value = username;
-    document.getElementById('edit_full_name').value = fullName;
-    document.getElementById('edit_email').value = email;
-    document.getElementById('edit_role').value = role;
-    document.getElementById('edit_is_active').checked = isActive;
-    document.getElementById('editUserForm').action = `/users/edit/${id}`;
-    document.getElementById('editUserModal').classList.add('active');
-}
+    function openEditUserModal(id, username, fullName, email, role, isActive) {
+        document.getElementById('edit_username').value = username;
+        document.getElementById('edit_full_name').value = fullName;
+        document.getElementById('edit_email').value = email;
+        document.getElementById('edit_role').value = role;
+        document.getElementById('edit_is_active').checked = isActive;
+        document.getElementById('editUserForm').action = `/users/edit/${id}`;
+        document.getElementById('editUserModal').classList.add('active');
+    }
 
-function closeEditUserModal() {
-    document.getElementById('editUserModal').classList.remove('active');
-}
+    function closeEditUserModal() {
+        document.getElementById('editUserModal').classList.remove('active');
+    }
 
-// Close modal when clicking outside
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', function(e) {
-        if (e.target === this) {
-            this.classList.remove('active');
-        }
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function (e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
     });
-});
 </script>
 {% endblock %}
