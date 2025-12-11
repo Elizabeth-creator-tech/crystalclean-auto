@@ -1,21 +1,21 @@
 // ===============================
 // MOBILE MENU FUNCTIONALITY
 // ===============================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    
+
     // Create overlay for mobile menu
     const navOverlay = document.createElement('div');
     navOverlay.className = 'nav-overlay';
     document.body.appendChild(navOverlay);
-    
+
     // Toggle menu function
     function toggleMenu() {
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
         navOverlay.classList.toggle('active');
-        
+
         // Prevent body scroll when menu is open
         if (navMenu.classList.contains('active')) {
             document.body.style.overflow = 'hidden';
@@ -23,31 +23,31 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = '';
         }
     }
-    
+
     // Hamburger click
     if (hamburger) {
         hamburger.addEventListener('click', toggleMenu);
     }
-    
+
     // Overlay click - close menu
-    navOverlay.addEventListener('click', function() {
+    navOverlay.addEventListener('click', function () {
         if (navMenu.classList.contains('active')) {
             toggleMenu();
         }
     });
-    
+
     // Close menu when clicking nav links
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             if (window.innerWidth <= 768 && navMenu.classList.contains('active')) {
                 toggleMenu();
             }
         });
     });
-    
+
     // Close menu on window resize if screen gets bigger
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
@@ -60,24 +60,24 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===============================
 // FLASH MESSAGES
 // ===============================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const flashMessages = document.querySelectorAll('.flash-message');
-    flashMessages.forEach(function(message) {
+    flashMessages.forEach(function (message) {
         // Auto-hide after 5 seconds
-        setTimeout(function() {
+        setTimeout(function () {
             message.style.transition = 'opacity 0.5s, transform 0.5s';
             message.style.opacity = '0';
             message.style.transform = 'translateX(400px)';
-            setTimeout(function() {
+            setTimeout(function () {
                 message.remove();
             }, 500);
-        }, 5000);
+        }, 3000);
     });
-    
+
     // Flash message close button
     const flashCloseButtons = document.querySelectorAll('.flash-close');
     flashCloseButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const flash = this.parentElement;
             flash.style.transition = 'opacity 0.5s, transform 0.5s';
             flash.style.opacity = '0';
@@ -100,18 +100,18 @@ function confirmDelete(message) {
 function validateForm(formId) {
     const form = document.getElementById(formId);
     if (!form) return;
-    
+
     const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
     inputs.forEach(input => {
-        input.addEventListener('blur', function() {
+        input.addEventListener('blur', function () {
             if (!this.value.trim()) {
                 this.style.borderColor = 'var(--danger-color)';
             } else {
                 this.style.borderColor = 'var(--border-color)';
             }
         });
-        
-        input.addEventListener('input', function() {
+
+        input.addEventListener('input', function () {
             if (this.value.trim()) {
                 this.style.borderColor = 'var(--border-color)';
             }
@@ -122,10 +122,10 @@ function validateForm(formId) {
 // ===============================
 // Auto-format plate number to uppercase
 // ===============================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const plateInputs = document.querySelectorAll('input[name="plate_number"]');
     plateInputs.forEach(input => {
-        input.addEventListener('input', function() {
+        input.addEventListener('input', function () {
             this.value = this.value.toUpperCase();
         });
     });
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function validatePhoneNumber(input) {
     const phonePattern = /^(\+254|0)[17]\d{8}$/;
     const value = input.value.trim();
-    
+
     if (value && !phonePattern.test(value)) {
         input.setCustomValidity('Please enter a valid Kenyan phone number (e.g., 0712345678)');
     } else {
@@ -145,10 +145,10 @@ function validatePhoneNumber(input) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const phoneInputs = document.querySelectorAll('input[name="customer_phone"]');
     phoneInputs.forEach(input => {
-        input.addEventListener('blur', function() {
+        input.addEventListener('blur', function () {
             validatePhoneNumber(this);
         });
     });
@@ -159,12 +159,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===============================
 function updateStatus(carId, newStatus) {
     const message = `Are you sure you want to change status to "${newStatus}"?`;
-    
+
     if (confirm(message)) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/cars/update-status/${carId}`;
-        
+
         const statusInput = document.createElement('input');
         statusInput.type = 'hidden';
         statusInput.name = 'status';
@@ -187,18 +187,18 @@ function updateStatus(carId, newStatus) {
 function searchTable(inputId, tableId) {
     const input = document.getElementById(inputId);
     if (!input) return;
-    
+
     const filter = input.value.toLowerCase();
     const table = document.getElementById(tableId);
     if (!table) return;
-    
+
     const rows = table.getElementsByTagName('tr');
-    
+
     for (let i = 1; i < rows.length; i++) {
         const row = rows[i];
         const cells = row.getElementsByTagName('td');
         let found = false;
-        
+
         for (let j = 0; j < cells.length; j++) {
             const cell = cells[j];
             if (cell) {
@@ -209,7 +209,7 @@ function searchTable(inputId, tableId) {
                 }
             }
         }
-        
+
         row.style.display = found ? '' : 'none';
     }
 }
@@ -219,29 +219,29 @@ function searchTable(inputId, tableId) {
 // ===============================
 function refreshDashboardStats() {
     const currentPath = window.location.pathname;
-    
+
     // Only refresh on dashboard pages
     if (!currentPath.includes('dashboard')) {
         return;
     }
-    
+
     // Simple page reload approach (more reliable)
-    setInterval(function() {
+    setInterval(function () {
         // Get current scroll position
         const scrollPos = window.scrollY;
-        
+
         // Reload the page
         location.reload();
-        
+
         // Restore scroll position after reload
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             window.scrollTo(0, scrollPos);
         }, { once: true });
     }, 10000); // 10 seconds
 }
 
 // Start auto-refresh on dashboard pages
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const currentPath = window.location.pathname;
     if (currentPath.includes('dashboard')) {
         // Show a subtle indicator that auto-refresh is enabled
@@ -262,24 +262,24 @@ function printReport() {
 function exportTableToCSV(tableId, filename) {
     const table = document.getElementById(tableId);
     if (!table) return;
-    
+
     let csv = [];
     const rows = table.querySelectorAll('tr');
-    
+
     for (let i = 0; i < rows.length; i++) {
         const row = [];
         const cols = rows[i].querySelectorAll('td, th');
-        
+
         // Exclude last column (usually actions)
         for (let j = 0; j < cols.length - 1; j++) {
             let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ');
             data = data.replace(/"/g, '""');
             row.push('"' + data + '"');
         }
-        
+
         csv.push(row.join(','));
     }
-    
+
     const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
     const downloadLink = document.createElement('a');
     downloadLink.download = filename;
@@ -313,20 +313,20 @@ document.addEventListener('DOMContentLoaded', requestNotificationPermission);
 // ===============================
 // Loading state for forms
 // ===============================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const forms = document.querySelectorAll('form');
-    
+
     forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             const submitBtn = form.querySelector('button[type="submit"]');
             if (submitBtn && !submitBtn.disabled) {
                 submitBtn.disabled = true;
                 submitBtn.style.opacity = '0.6';
                 const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<span>Processing...</span>';
-                
+
                 // Re-enable after 3 seconds as fallback
-                setTimeout(function() {
+                setTimeout(function () {
                     submitBtn.disabled = false;
                     submitBtn.style.opacity = '1';
                     submitBtn.innerHTML = originalText;
@@ -339,31 +339,31 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===============================
 // MOBILE BOTTOM NAVIGATION
 // ===============================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
     const currentPath = window.location.pathname;
-    
+
     // Set active state based on current URL
     bottomNavItems.forEach(item => {
         const href = item.getAttribute('href');
         if (href && href !== '#' && currentPath.includes(href)) {
             item.classList.add('active');
         }
-        
+
         // Add touch feedback
-        item.addEventListener('touchstart', function() {
+        item.addEventListener('touchstart', function () {
             this.style.transform = 'scale(0.95)';
         });
-        
-        item.addEventListener('touchend', function() {
+
+        item.addEventListener('touchend', function () {
             this.style.transform = 'scale(1)';
         });
     });
-    
+
     // Connect More button to hamburger menu
     const moreButtons = document.querySelectorAll('.bottom-nav-item[onclick*="hamburger"]');
     moreButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const hamburger = document.querySelector('.hamburger');
             if (hamburger) {

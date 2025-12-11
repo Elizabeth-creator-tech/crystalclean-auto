@@ -6,19 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Spot</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- PNG Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/spot_marker.png') }}">
 </head>
 
 <body>
     <div class="main-content"
-        style="display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding-top: 0;">
-        <div class="form-container">
-            <div class="text-center mb-4">
-                <div
-                    style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: var(--primary-light); color: var(--primary); border-radius: 50%; margin-bottom: 1rem; font-size: 2rem;">
-                    <i class="fas fa-car-side"></i>
+        style="display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 1rem 0;">
+        <div class="form-container" style="margin: 0 auto; max-width: 400px; padding: 2rem;">
+            <div class="text-center" style="margin-bottom: 1.5rem;">
+                <div style="margin-bottom: 1rem;">
+                    <span
+                        style="font-family: 'Inter', sans-serif; font-size: 2.5rem; letter-spacing: -1px; font-weight: 700; color: var(--text-primary);">Sp</span>
+                    <img src="{{ url_for('static', filename='images/spot_marker.png') }}" alt="o"
+                        style="height: 40px; width: auto; margin: 0 -6px; transform: translateY(6px);">
+                    <span
+                        style="font-family: 'Inter', sans-serif; font-size: 2.5rem; letter-spacing: -1px; font-weight: 700; color: var(--text-primary);">t</span>
                 </div>
-                <h1 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Welcome Back</h1>
-                <p style="color: var(--text-secondary);">Sign in to your dashboard</p>
+                <!-- Compact Header -->
+                <h1 style="font-size: 1.5rem; margin-bottom: 0.25rem;">Welcome Back</h1>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Sign in to your dashboard</p>
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -36,19 +43,20 @@
             <form method="POST" action="{{ url_for('login') }}">
                 {{ form.hidden_tag() }}
 
-                <div class="form-group">
-                    <label for="username" class="form-label">Username</label>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="username" class="form-label" style="margin-bottom: 0.4rem;">Username</label>
                     {{ form.username(class="form-control", placeholder="Enter your username", autocomplete="username")
                     }}
                 </div>
 
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="password" class="form-label" style="margin-bottom: 0.4rem;">Password</label>
                     {{ form.password(class="form-control", placeholder="Enter your password",
                     autocomplete="current-password") }}
                 </div>
 
-                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+                <div class="form-group"
+                    style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                         {{ form.remember_me(style="width: auto;") }}
                         <span style="font-size: 0.9rem; color: var(--text-secondary);">Remember me</span>
@@ -60,12 +68,12 @@
                     Sign In
                 </button>
             </form>
-
-
         </div>
     </div>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Main JS for interactions (Flash messages) -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
 </html>
