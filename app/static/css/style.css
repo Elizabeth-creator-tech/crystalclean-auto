@@ -632,9 +632,12 @@ a:hover {
 
 
     /* Centered forms shrink on mobile but keep centering */
+    /* Centered forms shrink on mobile but keep centering */
     .form-container {
-        margin: 1rem;
-        padding: 1.5rem;
+        margin: 1.5rem auto;
+        padding: 2rem;
+        width: 94%;
+        max-width: none;
     }
 
     /* Stack form rows on mobile */

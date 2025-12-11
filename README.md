@@ -1,8 +1,8 @@
-# CrystalClean Auto - Complete Documentation
+# Spot - Complete Documentation
 
 ## Overview
 
-CrystalClean Auto is a comprehensive web-based car wash management system built with Flask. It provides an intuitive interface for managing jobs, services, staff, and customer vehicles with real-time status tracking and role-based access control. The system uses PostgreSQL for reliable data persistence.
+Spot is a comprehensive web-based car wash management system built with Flask. It provides an intuitive interface for managing jobs, services, staff, and customer vehicles with real-time status tracking and role-based access control. The system uses PostgreSQL for reliable data persistence.
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ Before you begin, ensure you have the following installed on your system:
 
 ### Backend Files Required
 
-To set up CrystalClean Auto, you'll need to paste the following files into your project directory:
+To set up Spot, you'll need to paste the following files into your project directory:
 
 **Core Application Files:**
 - `app/models.py` - Database model definitions

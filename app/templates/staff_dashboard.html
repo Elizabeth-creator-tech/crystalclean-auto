@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Staff Dashboard - CrystalClean Auto{% endblock %}
+{% block title %}Staff Dashboard - Spot{% endblock %}
 
 {% block content %}
 <div class="dashboard-header" style="margin-bottom: 32px;">
@@ -58,14 +58,21 @@
                         </td>
                         <td>{{ car.time_in_display.strftime('%I:%M %p') if car.time_in_display else 'N/A' }}</td>
                         <td>
-                            <form method="POST" action="{{ url_for('update_status', car_id=car.id) }}" style="display: flex; gap: 8px; align-items: center;">
-                                <select name="status" class="form-control" style="width: auto; min-width: 150px;" required>
+                            <form method="POST" action="{{ url_for('update_status', car_id=car.id) }}"
+                                style="display: flex; gap: 8px; align-items: center;">
+                                <select name="status" class="form-control" style="width: auto; min-width: 150px;"
+                                    required>
                                     <option value="" disabled selected>Update status...</option>
-                                    <option value="Waiting" {% if car.status == 'Waiting' %}disabled{% endif %}>Waiting</option>
-                                    <option value="Washing" {% if car.status == 'Washing' %}disabled{% endif %}>Washing</option>
-                                    <option value="Detailing" {% if car.status == 'Detailing' %}disabled{% endif %}>Detailing</option>
-                                    <option value="Ready for Pickup" {% if car.status == 'Ready for Pickup' %}disabled{% endif %}>Ready for Pickup</option>
-                                    <option value="Completed" {% if car.status == 'Completed' %}disabled{% endif %}>Completed</option>
+                                    <option value="Waiting" {% if car.status=='Waiting' %}disabled{% endif %}>Waiting
+                                    </option>
+                                    <option value="Washing" {% if car.status=='Washing' %}disabled{% endif %}>Washing
+                                    </option>
+                                    <option value="Detailing" {% if car.status=='Detailing' %}disabled{% endif %}>
+                                        Detailing</option>
+                                    <option value="Ready for Pickup" {% if car.status=='Ready for Pickup' %}disabled{%
+                                        endif %}>Ready for Pickup</option>
+                                    <option value="Completed" {% if car.status=='Completed' %}disabled{% endif %}>
+                                        Completed</option>
                                 </select>
                                 <button type="submit" class="btn btn-sm btn-primary">Update</button>
                             </form>
@@ -114,9 +121,9 @@
                         <td>{{ car.time_out_display.strftime('%I:%M %p') if car.time_out_display else '-' }}</td>
                         <td>
                             {% if car.time_out and car.time_in %}
-                                {{ ((car.time_out - car.time_in).seconds // 60) }} mins
+                            {{ ((car.time_out - car.time_in).seconds // 60) }} mins
                             {% else %}
-                                -
+                            -
                             {% endif %}
                         </td>
                     </tr>
