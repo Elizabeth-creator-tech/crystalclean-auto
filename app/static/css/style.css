@@ -112,7 +112,7 @@ a:hover {
 
 /* Centered Form Layout */
 .form-container {
-    max-width: 500px;
+    max-width: 450px;
     margin: 3rem auto;
     background: var(--bg-surface);
     padding: 2.5rem;
@@ -633,10 +633,11 @@ a:hover {
 
     /* Centered forms shrink on mobile but keep centering */
     /* Centered forms shrink on mobile but keep centering */
+    /* Centered forms shrink on mobile but keep centering */
     .form-container {
-        margin: 1.5rem auto;
-        padding: 2rem;
-        width: 94%;
+        margin: 1rem auto;
+        padding: 1.5rem;
+        width: 96%;
         max-width: none;
     }
 

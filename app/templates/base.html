@@ -9,8 +9,8 @@
     <!-- Font Awesome 6 for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- PNG Favicon -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/spot_marker.png') }}">
+    <!-- SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/spot.svg') }}">
 </head>
 
 <body>
@@ -34,11 +34,9 @@
         <div class="nav-container">
             <!-- Brand -->
             <a href="{{ url_for('admin_dashboard') if current_user.role == 'admin' else url_for('staff_dashboard') }}"
-                class="nav-brand" style="font-family: 'Inter', sans-serif; font-size: 1.5rem; letter-spacing: -0.5px;">
-                <span style="color: var(--text-primary);">Sp</span>
-                <img src="{{ url_for('static', filename='images/spot_marker.png') }}" alt="o"
-                    style="height: 24px; width: auto; margin: 0 -4px; transform: translateY(4px);">
-                <span style="color: var(--text-primary);">t</span>
+                class="nav-brand" style="font-family: 'Inter', sans-serif;">
+                <img src="{{ url_for('static', filename='images/spot.svg') }}" alt="Spot"
+                    style="height: 40px; width: auto; margin: 0; transform: translateY(0);">
             </a>
 
             <!-- Desktop Menu -->

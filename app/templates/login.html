@@ -6,22 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Spot</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <!-- PNG Favicon -->
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/spot_marker.png') }}">
+    <!-- SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/spot.svg') }}">
 </head>
 
 <body>
     <div class="main-content"
         style="display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 1rem 0;">
-        <div class="form-container" style="margin: 0 auto; max-width: 400px; padding: 2rem;">
+        <div class="form-container">
             <div class="text-center" style="margin-bottom: 1.5rem;">
                 <div style="margin-bottom: 1rem;">
-                    <span
-                        style="font-family: 'Inter', sans-serif; font-size: 2.5rem; letter-spacing: -1px; font-weight: 700; color: var(--text-primary);">Sp</span>
-                    <img src="{{ url_for('static', filename='images/spot_marker.png') }}" alt="o"
-                        style="height: 40px; width: auto; margin: 0 -6px; transform: translateY(6px);">
-                    <span
-                        style="font-family: 'Inter', sans-serif; font-size: 2.5rem; letter-spacing: -1px; font-weight: 700; color: var(--text-primary);">t</span>
+                    <img src="{{ url_for('static', filename='images/spot.svg') }}" alt="Spot"
+                        style="height: 40px; width: auto; margin: 0 -2px; transform: translateY(8px);">
                 </div>
                 <!-- Compact Header -->
                 <h1 style="font-size: 1.5rem; margin-bottom: 0.25rem;">Welcome Back</h1>
