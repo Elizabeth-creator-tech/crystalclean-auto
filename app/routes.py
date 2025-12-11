@@ -745,6 +745,7 @@ def add_user():
             username=form.username.data.strip(),
             full_name=form.full_name.data,
             email=form.email.data.strip(),
+            phone_number=form.phone_number.data.strip(),
             role=form.role.data,
             is_active=form.is_active.data
         )
@@ -770,6 +771,7 @@ def edit_user(user_id):
         user.username = form.username.data.strip()
         user.full_name = form.full_name.data
         user.email = form.email.data.strip()
+        user.phone_number = form.phone_number.data.strip()
         user.role = form.role.data
         user.is_active = form.is_active.data
         if form.password.data:
