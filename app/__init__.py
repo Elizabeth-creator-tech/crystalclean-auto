@@ -22,9 +22,44 @@ def create_app(config_class=Config):
         
         db.create_all()
         
+        # Run database migrations for existing tables
+        run_migrations()
+        
         create_default_users()
     
     return app
+
+def run_migrations():
+    """Run database migrations for existing tables."""
+    from sqlalchemy import text, inspect
+    
+    print(" RUNNING DATABASE MIGRATIONS ")
+    
+    try:
+        # Get the database inspector
+        inspector = inspect(db.engine)
+        
+        # Check if 'users' table exists
+        if 'users' in inspector.get_table_names():
+            # Get existing columns
+            columns = [col['name'] for col in inspector.get_columns('users')]
+            
+            # Add phone_number column if it doesn't exist
+            if 'phone_number' not in columns:
+                print("Adding 'phone_number' column to 'users' table...")
+                db.session.execute(text("ALTER TABLE users ADD COLUMN phone_number VARCHAR(20)"))
+                db.session.commit()
+                print("[OK] Successfully added 'phone_number' column.")
+            else:
+                print("[OK] Column 'phone_number' already exists.")
+        else:
+            print("[INFO] 'users' table doesn't exist yet, will be created by create_all()")
+    
+    except Exception as e:
+        print(f"[ERROR] Migration error: {str(e)}")
+        db.session.rollback()
+    
+    print(" DATABASE MIGRATIONS COMPLETE ")
 
 def create_default_users():
     from app.models import User
