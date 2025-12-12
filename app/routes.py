@@ -91,58 +91,24 @@ def login():
     
     form = LoginForm()
     if form.validate_on_submit():
-        print(f"\n=== LOGIN ATTEMPT ===")
-        print(f"Username: {form.username.data}")
-        print(f"Password: {form.password.data}")
-        
         user = User.query.filter_by(username=form.username.data).first()
-        print(f"User found in DB: {user}")
-        
-        if user:
-            pwd_check = user.check_password(form.password.data)
-            print(f"Password check result: {pwd_check}")
         
         if user is None or not user.check_password(form.password.data):
-            print("LOGIN FAILED: Invalid credentials")
             flash('Invalid username or password', 'error')
             return redirect(url_for('login'))
         
         if not user.is_active:
-            print("LOGIN FAILED: User inactive")
             flash(Markup('Your account was deactivated. Please contact admin at <a href="mailto:murabulaelizabeth@gmail.com">murabulaelizabeth@gmail.com</a>'), 'error')
             return redirect(url_for('login'))
         
-        print(f"LOGIN SUCCESS: Logging in user {user.username}")
         login_user(user, remember=form.remember_me.data)
         flash(f'Welcome back, {user.full_name}!', 'success')
         
-        # login logoic
         if user.role == 'admin':
             return redirect(url_for('admin_dashboard'))
         return redirect(url_for('staff_dashboard'))
     
     return render_template('login.html', form=form)
-
-@app.route('/debug-login', methods=['POST'])
-def debug_login():
-    from flask import request
-    from app.models import User
-    
-    username = request.form.get('username', '').strip()
-    password = request.form.get('password', '').strip()
-    
-    user = User.query.filter_by(username=username).first()
-    
-    debug_info = {
-        'username_received': repr(username),
-        'username_length': len(username),
-        'password_length': len(password),
-        'user_found': user is not None,
-        'user_is_active': user.is_active if user else None,
-        'password_check': user.check_password(password) if user else None
-    }
-    
-    return debug_info
 
 @app.route('/logout')
 @login_required

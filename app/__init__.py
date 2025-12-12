@@ -63,8 +63,12 @@ def run_migrations():
 
 def create_default_users():
     from app.models import User
+    import os
     
     print(" STARTING USER CREATION ")
+    
+    # Get default password from environment variable (more secure for production)
+    default_password = os.environ.get('DEFAULT_ADMIN_PASSWORD', 'crystalclean2025')
     
     users_to_create = [
         {
@@ -72,14 +76,14 @@ def create_default_users():
             'full_name': 'Mark John',
             'email': 'admin@crystalclean.com',
             'role': 'admin',
-            'password': 'johnmark'
+            'password': default_password
         },
         {
             'username': 'Rachel',
             'full_name': 'Rachel Kirui',
             'email': 'kiruirachel@crystalclean.com',
             'role': 'staff',
-            'password': 'johnmark'
+            'password': default_password
         }
     ]
     
