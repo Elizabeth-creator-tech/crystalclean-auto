@@ -82,6 +82,7 @@ For Render or other hosting platforms, set these environment variables:
 
 - `DATABASE_URL` - PostgreSQL connection string (format: `postgresql://user:password@host:port/database`)
 - `SECRET_KEY` - A strong secret key for sessions
+- `DEFAULT_ADMIN_PASSWORD` - (Optional) Custom password for default users (default: `crystalclean2025`)
 
 ## Running the Application
 
@@ -145,8 +146,10 @@ The system supports two user roles:
 
 The system automatically creates two default users on first run:
 
-- **Admin:** Username: `Mark`, Password: `johnmark`
-- **Staff:** Username: `Rachel`, Password: `johnmark`
+- **Admin:** Username: `Mark`, Password: `crystalclean2025`
+- **Staff:** Username: `Rachel`, Password: `crystalclean2025`
+
+> **Note:** You can customize the default password by setting the `DEFAULT_ADMIN_PASSWORD` environment variable before deployment.
 
 You can add additional users through the UI after logging in.
 
@@ -193,11 +196,13 @@ The interface works seamlessly on desktop computers, tablets, and mobile devices
 
 **Admin Account:**
 - Username: `Mark`
-- Password: `johnmark`
+- Password: `crystalclean2025`
 
 **Staff Account:**
 - Username: `Rachel`
-- Password: `johnmark`
+- Password: `crystalclean2025`
+
+> **Tip:** Set `DEFAULT_ADMIN_PASSWORD` environment variable on Render to use a custom password.
 
 ### Accessing the Application
 
@@ -308,6 +313,38 @@ The delete function checks if a user has assigned jobs. If they do, the deletion
 - Extended customer profile management
 - Inventory tracking system
 
+## Changelog & Bug Fixes
+
+### v1.1.0 (December 2025) - Production Hotfix
+
+#### 🐛 Bug Fixed: `phone_number` Column Missing in Production
+
+**Problem:** After adding a `phone_number` field to the User model, the production site crashed with:
+```
+psycopg2.errors.UndefinedColumn: column users.phone_number does not exist
+```
+
+**Root Cause:** `db.create_all()` only creates NEW tables, it does NOT add columns to EXISTING tables. The production PostgreSQL database already had a `users` table without this column.
+
+**Solution:** Added automatic database migration in `app/__init__.py`:
+- New `run_migrations()` function runs on every startup
+- Uses SQLAlchemy's `inspect` to check for missing columns
+- Adds missing columns via `ALTER TABLE` statements
+- Works with both PostgreSQL (production) and SQLite (local dev)
+
+**Lesson Learned:** When adding new columns to existing models:
+1. Always create a migration strategy for production databases
+2. Test deployment on a staging environment first
+3. Check Render logs immediately after deployment
+
+#### 🔒 Security Enhancements
+
+- **Removed `/debug-login` endpoint** - was exposing password validation results
+- **Removed debug print statements** - were logging usernames/passwords in production logs
+- **Environment variable for passwords** - default users now use `DEFAULT_ADMIN_PASSWORD` env var
+
+---
+
 ## Support
 
 When encountering issues:
@@ -318,3 +355,11 @@ When encountering issues:
 4. Check database connectivity
 5. Review application logs in terminal or Render dashboard
 6. Verify environment variables are correctly set
+
+### Common Production Issues
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `UndefinedColumn` | New column added to model but not in DB | Add migration in `run_migrations()` |
+| Password logged in console | Debug print statements | Remove all `print()` calls with sensitive data |
+| Users can't login after deploy | Password was changed | Set `DEFAULT_ADMIN_PASSWORD` env var |
